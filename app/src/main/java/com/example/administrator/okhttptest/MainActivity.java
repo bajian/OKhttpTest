@@ -113,6 +113,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * json返回gson解析类
+     * @param view
+     */
     public void object(View view){
         OkHttpClientManager.getAsyn("http://guixuan.snewfly.com/json", new OkHttpClientManager.ResultCallback<VersionBean>() {
 
@@ -124,6 +128,25 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(VersionBean response) {
                 tv.setText(response.getData().getUrl());
+            }
+        });
+    }
+
+    /**
+     * json返回gson解析类
+     * @param view
+     */
+    public void bili(View view){
+        OkHttpClientManager.getAsyn("http://api.bilibili.cn/list?pagesize=50&tid=29&ver=2", new OkHttpClientManager.ResultCallback<String>() {
+
+            @Override
+            public void onError(Request request, Exception e) {
+
+            }
+
+            @Override
+            public void onResponse(String response) {
+                tv.setText(response);
             }
         });
     }

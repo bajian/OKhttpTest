@@ -54,6 +54,8 @@ import javax.net.ssl.X509TrustManager;
 public class OkHttpClientManager
 {
     private static final String TAG = "OkHttpClientManager";
+    private static final String UA = "BiLi Android Client/1.0.0 (313066164@qq.com)";
+//    public static final String UA = "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.89 Safari/537.36";
 
     private static OkHttpClientManager mInstance;
     private OkHttpClient mOkHttpClient;
@@ -83,7 +85,7 @@ public class OkHttpClientManager
                 return true;
             }
         });
-
+        mOkHttpClient.networkInterceptors().add(new SignInterceptor());
     }
 
     public static OkHttpClientManager getInstance()
@@ -318,7 +320,9 @@ public class OkHttpClientManager
 
         Request.Builder reqBuilder = new Request.Builder();
         reqBuilder.url(url)
-                .post(requestBody);
+                .post(requestBody)
+                .removeHeader("User-Agent")
+                .addHeader("User-Agent", UA);
 
         if (tag != null)
         {
@@ -357,7 +361,6 @@ public class OkHttpClientManager
             mType = getSuperclassTypeParameter(getClass());
         }
 
-
         static Type getSuperclassTypeParameter(Class<?> subclass)
         {
             Type superclass = subclass.getGenericSuperclass();
@@ -369,13 +372,9 @@ public class OkHttpClientManager
             return $Gson$Types.canonicalize(parameterized.getActualTypeArguments()[0]);
         }
 
-        public void onBefore(Request request)
-        {
-        }
+        public void onBefore(Request request){}
 
-        public void onAfter()
-        {
-        }
+        public void onAfter(){}
 
         public abstract void onError(Request request, Exception e);
 
@@ -623,7 +622,9 @@ public class OkHttpClientManager
         private Request buildGetRequest(String url, Object tag)
         {
             Request.Builder builder = new Request.Builder()
-                    .url(url);
+                    .url(url)
+                    .removeHeader("User-Agent")
+                    .addHeader("User-Agent", UA);
 
             if (tag != null)
             {
